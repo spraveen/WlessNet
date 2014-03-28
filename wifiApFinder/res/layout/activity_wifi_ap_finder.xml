@@ -11,41 +11,12 @@
          TextureView, etc.
     -->
 
-    <TextView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-    
-    <ListView
-      android:id="@+id/listView1"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_alignParentTop="true"
-      android:layout_centerHorizontal="true"
-      android:drawSelectorOnTop="false"
-      android:background="@android:color/background_dark"
-      android:listSelector="@android:color/darker_gray" >
-
-   </ListView>
-
     <!--
          This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows.
     -->
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" >
-
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
+<LinearLayout
+            android:id="@+id/fullscreen_content"
             style="?buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,15 +24,22 @@
             android:background="@color/black_overlay"
             android:orientation="horizontal"
             tools:ignore="UselessParent" >
+    <Button
+        android:id="@+id/button1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="114dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal|right"
+        android:text="@string/test_phase1" 
+        android:onClick="startPhase1"/>
 
-            <Button
-                android:id="@+id/dummy_button"
-                style="?buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/dummy_button" />
-        </LinearLayout>
-    </FrameLayout>
+    <Button
+        android:id="@+id/button2"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center_horizontal|left"
+        android:text="@string/test_phase2" />
+    </LinearLayout>
 
 </FrameLayout>
