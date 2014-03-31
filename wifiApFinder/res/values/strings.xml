@@ -7,5 +7,6 @@
     <string name="test_phase1">Phase 1 Test</string>
     <string name="test_phase2">Phase 2 Test</string>
     <string name="title_activity_wifi_ap_finder_phase1">WifiApFinderPhase1</string>
+    <string name="end_phase1">Cancel Scanning</string>
 
 </resources>
