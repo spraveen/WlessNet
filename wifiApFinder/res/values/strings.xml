@@ -8,5 +8,7 @@
     <string name="test_phase2">Phase 2 Test</string>
     <string name="title_activity_wifi_ap_finder_phase1">WifiApFinderPhase1</string>
     <string name="end_phase1">Cancel Scanning</string>
+    <string name="computeP1">Compute Results</string>
+    <string name="recordP1">Record Reading</string>
 
 </resources>

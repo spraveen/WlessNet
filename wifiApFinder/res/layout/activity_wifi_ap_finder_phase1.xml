@@ -5,37 +5,40 @@
     android:background="#0099cc"
     tools:context=".WifiApFinderPhase1" >
 
-    <FrameLayout
+    <ListView
+        android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" >
+        android:layout_height="wrap_content" >
+    </ListView>
 
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </ListView>
-
-        <LinearLayout
-            android:id="@+id/fullscreen_content_controls"
-            style="?buttonBarStyle"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/fullscreen_content_controls"
+        style="?buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@color/black_overlay"
+        android:orientation="horizontal"
+        tools:ignore="UselessParent" >
+        
+        <Button
+            android:id="@+id/recordP1"
+            style="?buttonBarButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/black_overlay"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            tools:ignore="UselessParent" >
+            android:layout_gravity="bottom|center_horizontal|left"
+            android:onClick="recordReading"
+            android:text="@string/recordP1" />
 
-            <Button
-                android:id="@+id/dummy_button"
-                style="?buttonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/end_phase1" 
-                android:onClick ="closeActivity"/>
-        </LinearLayout>
-    </FrameLayout>
+        <Button
+            android:id="@+id/computeP1"
+            style="?buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal|right"
+            android:onClick="computeP1"
+            android:text="@string/computeP1" />
+         </LinearLayout>
+   
 
 </FrameLayout>
