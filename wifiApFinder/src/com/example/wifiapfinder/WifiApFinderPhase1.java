@@ -67,10 +67,10 @@ public class WifiApFinderPhase1 extends Activity {
 
 		geoLocations.add(loc);
 		Toast.makeText(getApplicationContext(),
-				"Lat:Long " + latitude + ":" + longitude, Toast.LENGTH_LONG)
+				"Reading beacons @ Lat:Long " + latitude + ":" + longitude, Toast.LENGTH_SHORT)
 				.show();
 
-		alertBox("Wifi Scanning In Progres..");
+//		alertBox("Wifi Scanning In Progres..");
 
 		// once you get the location read the wifi signals..
 		wifiMgrPhase1.startScan();
@@ -105,9 +105,7 @@ public class WifiApFinderPhase1 extends Activity {
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
 		public void onItemClick(@SuppressWarnings("rawtypes") AdapterView parent, View v, int position,
 				long id) {
-			// Display a messagebox.
-			Toast.makeText(getApplicationContext(), "You've got an event",
-					Toast.LENGTH_SHORT).show();
+			//open the maps for the position
 			showMap((String) list.getItemAtPosition(position));
 		}
 	};
@@ -159,6 +157,8 @@ public class WifiApFinderPhase1 extends Activity {
 
 			list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 					android.R.layout.simple_list_item_1, wifis));
+			Toast.makeText(getApplicationContext(), "Wifi Scan Completed",
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
