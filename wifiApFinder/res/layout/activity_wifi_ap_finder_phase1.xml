@@ -20,7 +20,7 @@
         android:background="@color/black_overlay"
         android:orientation="horizontal"
         tools:ignore="UselessParent" >
-        
+
         <Button
             android:id="@+id/recordP1"
             style="?buttonBarButtonStyle"
@@ -38,7 +38,6 @@
             android:layout_gravity="bottom|center_horizontal|right"
             android:onClick="computeP1"
             android:text="@string/computeP1" />
-         </LinearLayout>
-   
+    </LinearLayout>
 
 </FrameLayout>

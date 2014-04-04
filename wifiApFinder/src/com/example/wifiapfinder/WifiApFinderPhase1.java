@@ -103,7 +103,7 @@ public class WifiApFinderPhase1 extends Activity {
 
 	// Create a message handling object as an anonymous class.
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
-		public void onItemClick(AdapterView parent, View v, int position,
+		public void onItemClick(@SuppressWarnings("rawtypes") AdapterView parent, View v, int position,
 				long id) {
 			// Display a messagebox.
 			Toast.makeText(getApplicationContext(), "You've got an event",
