@@ -10,5 +10,6 @@
     <string name="end_phase1">Cancel Scanning</string>
     <string name="computeP1">Compute Results</string>
     <string name="recordP1">Record Reading</string>
+    <string name="computerHeader">Suggestions</string>
 
 </resources>

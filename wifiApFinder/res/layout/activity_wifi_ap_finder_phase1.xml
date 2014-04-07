@@ -5,12 +5,34 @@
     android:background="#0099cc"
     tools:context=".WifiApFinderPhase1" >
 
+    
     <ListView
         android:id="@+id/listView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:layout_marginTop="60dp">
+        android:layout_height="248dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="100dp"
+         >
+
+    </ListView>
+    
+    <TextView android:id="@+android:id/listHeading" 
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:text="@string/computerHeader"
+		android:layout_marginTop="335dp"
+        android:layout_marginBottom="100dp"
+        android:textSize="30sp"
+		android:textStyle="bold"
+	/>
+    
+    <ListView
+        android:id="@+id/listView2"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="370dp"
+        android:background="@color/black_overlay" >
+
     </ListView>
 
     <LinearLayout

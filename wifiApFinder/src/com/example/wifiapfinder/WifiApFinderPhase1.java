@@ -1,6 +1,8 @@
 package com.example.wifiapfinder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.SuppressLint;
@@ -36,9 +38,10 @@ import com.example.wifiapfinder.util.SystemUiHider;
 public class WifiApFinderPhase1 extends Activity {
 	WifiManager wifiMgrPhase1;
 	WifiScanReceiver wifiRecieverPhase1;
-	ListView list;
+	ListView list, suggestions;
 	String wifis[];
 	List<Location> geoLocations;
+	ArrayList<HashMap<String, wifiApLocObject>> apList;
 	GpsLocationReceiver gpsLoc;
 
 	@Override
@@ -49,11 +52,15 @@ public class WifiApFinderPhase1 extends Activity {
 		// GPS location receiver
 		gpsLoc = new GpsLocationReceiver();
 
+		// ap hashmap creation
+		apList = new ArrayList<HashMap<String, wifiApLocObject>>();
+
 		// geo location list
 		geoLocations = new ArrayList<Location>();
 
 		// wifi scan results
 		list = (ListView) findViewById(R.id.listView1);
+		suggestions = (ListView) findViewById(R.id.listView2);
 		wifiMgrPhase1 = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		wifiRecieverPhase1 = new WifiScanReceiver();
 	}
@@ -67,10 +74,10 @@ public class WifiApFinderPhase1 extends Activity {
 
 		geoLocations.add(loc);
 		Toast.makeText(getApplicationContext(),
-				"Reading beacons @ Lat:Long " + latitude + ":" + longitude, Toast.LENGTH_SHORT)
-				.show();
+				"Reading beacons @ Lat:Long " + latitude + ":" + longitude,
+				Toast.LENGTH_SHORT).show();
 
-//		alertBox("Wifi Scanning In Progres..");
+		// alertBox("Wifi Scanning In Progres..");
 
 		// once you get the location read the wifi signals..
 		wifiMgrPhase1.startScan();
@@ -78,34 +85,48 @@ public class WifiApFinderPhase1 extends Activity {
 				WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
 	}
 
-	public void computeP1(View view) {
-		// alertBox("Compute Module TBD");
+	public String getQueryStrFromLocation(Location loc) {
 		double gLatitude, gLongitude;
 		String label = "AP Pos";
 		String zoomSetting = "&z=23";
+		gLatitude = loc.getLatitude();
+		gLongitude = loc.getLongitude();
+		String geoUriBegin = "geo:" + gLatitude + "," + gLongitude;
+		String geoUriQuery = "" + gLatitude + "," + gLongitude + "(" + label
+				+ ")";
+		String encodedQuery = Uri.encode(geoUriQuery);
+		String uriString = geoUriBegin + "?q=" + encodedQuery + zoomSetting;
+		return uriString;
+	}
+
+	public void computeP1(View view) {
+		// alertBox("Compute Module TBD");
+
 		String locations[] = new String[geoLocations.size()];
 		for (int i = 0; i < geoLocations.size(); i++) {
 			// locations[i] = ((geoLocations.get(i)).toString());
-			gLatitude = (geoLocations.get(i)).getLatitude();
-			gLongitude = (geoLocations.get(i)).getLongitude();
-			String geoUriBegin = "geo:" + gLatitude + ","
-					+ gLongitude;
-			String geoUriQuery = ""+gLatitude+","+gLongitude+"(" + label + ")";
-			String encodedQuery = Uri.encode( geoUriQuery  );
-			String uriString = geoUriBegin + "?q=" + encodedQuery + zoomSetting ;
-			locations[i] = uriString;
+			locations[i] = getQueryStrFromLocation(geoLocations.get(i));
 		}
 
 		list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 				android.R.layout.simple_list_item_1, locations));
 		list.setOnItemClickListener(mMessageClickedHandler);
+
+		String displayList[] = new String[apList.size()];
+		for(int i =0;i<apList.size();i++){
+			displayList[i] = apList.get(i).toString();
+		}
+		suggestions.setAdapter(new ArrayAdapter<String>(
+				getApplicationContext(), android.R.layout.simple_list_item_1,
+				displayList));
 	}
 
 	// Create a message handling object as an anonymous class.
 	private OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
-		public void onItemClick(@SuppressWarnings("rawtypes") AdapterView parent, View v, int position,
-				long id) {
-			//open the maps for the position
+		public void onItemClick(
+				@SuppressWarnings("rawtypes") AdapterView parent, View v,
+				int position, long id) {
+			// open the maps for the position
 			showMap((String) list.getItemAtPosition(position));
 		}
 	};
@@ -147,18 +168,73 @@ public class WifiApFinderPhase1 extends Activity {
 	}
 
 	class WifiScanReceiver extends BroadcastReceiver {
+
+		// number of levels the wifi signal is calculated for.
+		private static final int WIFI_RSSI_STRENGTH_LEVELS = 5;
+
+		@SuppressWarnings("boxing")
+		private final ArrayList<Integer> channel_2_4Ghz = new ArrayList<Integer>(
+				Arrays.asList(0, 2412, 2417, 2422, 2427, 2432, 2437, 2442,
+						2447, 2452, 2457, 2462, 2467, 2472, 2484));
+
+		public int getChannelFromFrequency(int frequency) {
+			return channel_2_4Ghz.indexOf(Integer.valueOf(frequency));
+		}
+
+		public int getSignalStrength(int rssi) {
+			return WifiManager.calculateSignalLevel(rssi,
+					WIFI_RSSI_STRENGTH_LEVELS);
+		}
+
 		@SuppressLint("UseValueOf")
 		public void onReceive(Context c, Intent intent) {
 			List<ScanResult> wifiScanList = wifiMgrPhase1.getScanResults();
 			wifis = new String[wifiScanList.size()];
+			double dBmToWatt[] = new double[wifiScanList.size()];
+			double totaldBm = 0;
+			wifiApLocObject apObj;
+
 			for (int i = 0; i < wifiScanList.size(); i++) {
-				wifis[i] = ((wifiScanList.get(i)).toString());
+				double dBm = (double) wifiScanList.get(i).level;
+				dBmToWatt[i] = (Math.pow(10, (dBm / 10))) / 1000;
+				totaldBm += dBmToWatt[i];
 			}
 
+			totaldBm = 10 * Math.log10(1000 * totaldBm);
+
+			for (int i = 0; i < wifiScanList.size(); i++) {
+				int channel = getChannelFromFrequency(wifiScanList.get(i).frequency);
+				if (channel == -1)
+					wifis[i] = ((wifiScanList.get(i)).toString());
+				else
+					wifis[i] = ((wifiScanList.get(i)).toString())
+							+ ", (2.4Ghz@Ch:" + channel + ")";
+				wifis[i] += ", Strength Level:"
+						+ getSignalStrength(wifiScanList.get(i).level);
+				wifis[i] += ", dBmLog:" + dBmToWatt[i] + ", totaldBm:"
+						+ totaldBm;
+			}
+
+			Location lastLoc = geoLocations.get(geoLocations.size() - 1);
+			apObj = new wifiApLocObject(
+					getQueryStrFromLocation(lastLoc), totaldBm);
+			
+			String key = lastLoc.getLatitude()+","+lastLoc.getLongitude();
+			HashMap<String, wifiApLocObject> map = new HashMap<String, wifiApLocObject>();
+			map.put(key, apObj);
+			apList.add(map);
+			
 			list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 					android.R.layout.simple_list_item_1, wifis));
-			Toast.makeText(getApplicationContext(), "Wifi Scan Completed",
-					Toast.LENGTH_SHORT).show();
+
+			// Toast.makeText(getApplicationContext(), "Wifi Scan Completed",
+			// Toast.LENGTH_SHORT).show();
+			// unregister the service after first reading..
+			try {
+				unregisterReceiver(wifiRecieverPhase1);
+			} catch (IllegalArgumentException e) {
+				; // DO nothing..
+			}
 		}
 	}
 
@@ -275,4 +351,17 @@ public class WifiApFinderPhase1 extends Activity {
 
 	}
 
+	class wifiApLocObject {
+		String geoUriStr;
+		double dBmValue;
+
+		public wifiApLocObject(String geoUriStr, double dBmValue) {
+			this.geoUriStr = new String(geoUriStr);
+			this.dBmValue = dBmValue;
+		}
+
+		public String toString() {
+			return ("GeoString:" + geoUriStr + "," + "dBm:" + dBmValue);
+		}
+	}
 }
