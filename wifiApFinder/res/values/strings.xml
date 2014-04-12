@@ -11,5 +11,8 @@
     <string name="computeP1">Compute Results</string>
     <string name="recordP1">Record Reading</string>
     <string name="computerHeader">Compute Results</string>
+    <string name="title_activity_wifi_ap_finder_phase2">WifiApFinderPhase2</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

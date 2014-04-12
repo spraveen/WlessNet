@@ -41,12 +41,19 @@ public class WifiApFinderActivity extends Activity {
 				int position, long id) {
 			if(position == 0){
 				startPhase1(v);
+			}else if(position == 1){
+				startPhase2(v);
 			}
 		}
 	};
 
 	public void startPhase1(View view) {
 		Intent intent = new Intent(this, WifiApFinderPhase1.class);
+		startActivity(intent);
+	}
+	
+	public void startPhase2(View view) {
+		Intent intent = new Intent(this, WifiApFinderPhase2.class);
 		startActivity(intent);
 	}
 
