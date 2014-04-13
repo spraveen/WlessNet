@@ -23,11 +23,12 @@
     </ListView>
     
     <TextView android:id="@+android:id/listHeading" 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
 		android:layout_height="wrap_content" 
 		android:text="@string/computerHeader"
 		android:layout_marginTop="335dp"
         android:layout_marginBottom="100dp"
+        android:layout_gravity="center_horizontal"
         android:textSize="30sp"
 		android:textStyle="bold"
 		android:background="@color/black_overlay"

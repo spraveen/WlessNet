@@ -1,14 +1,24 @@
 package com.example.wifiapfinder;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.wifiapfinder.WifiApFinderPhase1.WifiScanReceiver;
+
 public class WifiApFinderPhase2 extends Activity {
-	ListView list;
+	WifiManager wifiMgrPhase2;
+	WifiScanReceiver wifiRecieverPhase2;
+	ListView list, result;
+	ArrayList<String> wifis;
 	String displayList[];
 
 	@Override
@@ -21,17 +31,33 @@ public class WifiApFinderPhase2 extends Activity {
 				"shanmugam" };
 
 		list = (ListView) findViewById(R.id.listView3);
+		result = (ListView) findViewById(R.id.listView4);
 
 		list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 				android.R.layout.simple_list_item_1, displayList));
+		
+		wifis = new ArrayList<String>();
+		wifiMgrPhase2 = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	}
 
 	public void recordReadingP2(View view) {
-		alertBox("Record P2");
+//		alertBox("Record P2");
+		String dis[] = new String[1];
+		WifiInfo w = wifiMgrPhase2.getConnectionInfo();
+		dis[0] = w.toString();
+		wifis.add(w.toString());
+		list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
+				android.R.layout.simple_list_item_1, dis));
 	}
 
 	public void computeP2(View view) {
-		alertBox("Compute P2");
+//		alertBox("Compute P2");
+		String dis[] = new String[wifis.size()];
+		for(int i=0;i < wifis.size(); i++){
+			dis[i] = wifis.get(i);
+		}
+		result.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
+				android.R.layout.simple_list_item_1, dis));
 	}
 
 	public void alertBox(String text) {
