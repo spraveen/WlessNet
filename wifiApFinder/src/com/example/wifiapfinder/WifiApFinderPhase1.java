@@ -246,6 +246,10 @@ public class WifiApFinderPhase1 extends Activity {
 
 			list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 					android.R.layout.simple_list_item_1, wifis));
+			
+			suggestions.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
+					android.R.layout.simple_list_item_1, new String[]{apObj.toString()}));
+			
 
 			// Toast.makeText(getApplicationContext(), "Wifi Scan Completed",
 			// Toast.LENGTH_SHORT).show();
@@ -345,8 +349,8 @@ public class WifiApFinderPhase1 extends Activity {
 		@Override
 		public void onLocationChanged(Location location) {
 			this.location = location;
-			Toast.makeText(getApplicationContext(), "GPS location updated"+location,
-					Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "GPS location updated"+location,
+//					Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
